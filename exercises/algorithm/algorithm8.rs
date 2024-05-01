@@ -75,7 +75,8 @@ impl<T> myStack<T> {
     }
     pub fn is_empty(&self) -> bool {
 		//TODO
-        true
+        let x:bool = self.q1.is_empty() & self.q2.is_empty();
+        x
     }
 }
 

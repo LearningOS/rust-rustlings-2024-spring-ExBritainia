@@ -2,7 +2,6 @@
 	single linked list merge
 	This problem requires you to merge two ordered singly linked lists into one ordered singly linked list
 */
-// I AM NOT DONE
 
 use std::fmt::{self, Display, Formatter};
 use std::ptr::NonNull;
@@ -70,15 +69,80 @@ impl<T> LinkedList<T> {
         }
     }
 	pub fn merge(list_a:LinkedList<T>,list_b:LinkedList<T>) -> Self
+        where T : Copy + PartialOrd + Display
 	{
 		//TODO
 		Self {
             length: 0,
             start: None,
             end: None,
+        };
+        let mut i = unsafe{list_a.start.unwrap().as_ref()};
+        let mut a:Vec<T> = Vec::new();
+        while i.next != None{
+            a.push(i.val);
+            println!("{}",i.val);
+            i = unsafe{i.next.unwrap().as_ref()};
         }
+        a.push(i.val);
+        i = unsafe{list_b.start.unwrap().as_ref()};
+        let mut b:Vec<T> = Vec::new();
+        while i.next != None{
+            b.push(i.val);
+            i = unsafe{i.next.unwrap().as_ref()};
+        }
+        b.push(i.val);
+        //println!("Linked List is");
+        let n = a.len();
+        let m = b.len();
+        println!("{},{}",n,m);
+        let mut x:i32 = (n - 1).try_into().unwrap();
+        let mut y:i32 = (m - 1).try_into().unwrap();
+        println!("{},{}",x,y);
+        let mut ptr1 = m + n - 1;
+        ptr1 = ptr1 as usize;
+        //let mut c:Vec<T> = Vec::new();
+        for i in 0..m{
+            a.push(b[i]);
+        }
+        println!("{}",ptr1);
+        while x >= 0 && y >= 0 {
+            println!("{},{}",x,y);
+            if a[x as usize] > b[y as usize] {
+                a[ptr1] = a[x as usize];
+                println!("{},{}",x,y);
+                x -= 1;
+                println!("{},{}",x,y);
+            }else{
+                a[ptr1] = b[y as usize];
+                println!("{},{}",x,y);
+                y -= 1;
+                println!("{},{}",x,y);
+            }
+            ptr1 -= 1;
+            println!("{}",ptr1);
+        }
+        
+        println!("{},{}",x,y);
+        while x >= 0 {
+            a[ptr1] = a[x as usize];
+            x -= 1;
+            //ptr1 -= 1;
+        }
+        while y >= 0 {
+            a[ptr1] = b[y as usize];
+            y -= 1;
+            //ptr1 -= 1;
+        }
+        let mut c = LinkedList{length:0,start:None,end:None};
+        for i in a {
+            c.add(i);
+        }
+        c
 	}
 }
+
+
 
 impl<T> Display for LinkedList<T>
 where
