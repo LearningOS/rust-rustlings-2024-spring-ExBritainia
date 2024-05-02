@@ -2,7 +2,6 @@
 	graph
 	This problem requires you to implement a basic graph functio
 */
-// I AM NOT DONE
 
 use std::collections::{HashMap, HashSet};
 use std::fmt;
@@ -30,6 +29,38 @@ impl Graph for UndirectedGraph {
     }
     fn add_edge(&mut self, edge: (&str, &str, i32)) {
         //TODO
+        let (a,b,c) = edge;
+        match self.adjacency_table.get(a){
+            Some(y) => {
+                let mut x = self.adjacency_table.get(a).unwrap().clone();
+                x.push((b.to_string(),c));
+                self.adjacency_table.insert(a.to_string(),x);
+            },
+            None => {
+                self.adjacency_table.insert(a.to_string(),Vec::new());
+                let mut x = self.adjacency_table.get(a).unwrap().clone();
+                x.push((b.to_string(),c));
+                self.adjacency_table.insert(a.to_string(),x);
+            },
+        };
+
+        match self.adjacency_table.get(b){
+            Some(y) => {
+                let mut x = self.adjacency_table.get(b).unwrap().clone();
+                x.push((a.to_string(),c));
+                self.adjacency_table.insert(b.to_string(),x);
+            },
+            None => {
+                self.adjacency_table.insert(b.to_string(),Vec::new());
+                let mut x = self.adjacency_table.get(b).unwrap().clone();
+                x.push((a.to_string(),c));
+                self.adjacency_table.insert(b.to_string(),x);
+            },
+        };
+        
+        //x = self.adjacency_table.get(b).unwrap().clone();
+        //x.push((a.to_string(),c));
+        //self.adjacency_table.insert(b.to_string(),x);
     }
 }
 pub trait Graph {
@@ -42,6 +73,7 @@ pub trait Graph {
     }
     fn add_edge(&mut self, edge: (&str, &str, i32)) {
         //TODO
+        self.add_edge(edge);
     }
     fn contains(&self, node: &str) -> bool {
         self.adjacency_table().get(node).is_some()
